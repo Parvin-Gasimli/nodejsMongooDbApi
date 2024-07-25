@@ -5,7 +5,16 @@
   "main": "connectdb.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "prepare": "husky"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*": "prettier --write"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +31,16 @@
     "nodemon": "^3.1.4",
     "slugify": "^1.6.6",
     "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.6.0",
+    "globals": "^15.8.0",
+    "husky": "^9.1.1",
+    "lint-staged": "^15.2.7"
   }
 }
