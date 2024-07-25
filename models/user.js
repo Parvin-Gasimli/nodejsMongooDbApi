@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validate = require("validator");
 const bcyrpt = require("bcryptjs");
 const JsonwebToken = require("jsonwebtoken");
-
+const cypto = require("crypto");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+
   this.password = await bcyrpt.hash(this.password, 10);
 });
 userSchema.methods.getJwtToken = function () {
@@ -47,6 +51,15 @@ userSchema.methods.getJwtToken = function () {
 };
 userSchema.methods.comparePassword = async function (enterPassword) {
   return await bcyrpt.compare(enterPassword, this.password);
+};
+userSchema.methods.getResetPasswordToken = function () {
+  const resetToken = cypto.randomBytes(20).toString("hex");
+  this.resetPasswordToken = cypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
+  return resetToken;
 };
 
 module.exports = mongoose.model("User", userSchema);
