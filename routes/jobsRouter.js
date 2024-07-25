@@ -5,6 +5,7 @@ const {
   updateJobs,
   deleteJob,
 } = require("../controllers/jobController");
+
 const router = express.Router();
 
 router.route("/jobs").get(getJobs);
